@@ -71,7 +71,22 @@ services:
     env_file: env/redis-cache.env
     volumes:
       - netbox-redis-cache-data:/data
-
+  nginx:
+    image: lscr.io/linuxserver/nginx:latest
+    container_name: nginx
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - NGINX_AUTORELOAD= #optional
+      - NGINX_AUTORELOAD_WATCHLIST= #optional
+    volumes:
+      - ./nginxconf:/config
+      - ./certs:/config/keys
+    ports:
+      - 80:80
+      - 443:443
+    restart: unless-stopped
 volumes:
   netbox-media-files:
     driver: local
